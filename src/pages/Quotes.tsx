@@ -295,7 +295,8 @@ export function Quotes() {
           status: 'em_andamento',
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-          quoteId: quote.id
+          quoteId: quote.id,
+          server_token: 'ignishard18458416'
         });
 
         const quoteRef = doc(db, `tenants/${tenantId}/quotes`, quote.id);
@@ -365,7 +366,8 @@ export function Quotes() {
         const quotesRef = collection(db, `tenants/${tenantId}/quotes`);
         await addDoc(quotesRef, {
           ...quoteData,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          server_token: 'ignishard18458416'
         });
       }
 

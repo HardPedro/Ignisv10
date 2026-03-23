@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
-import { db } from './server/firebase.js';
+import { db, auth } from './server/firebase.js';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, query, where, getDocs, addDoc, updateDoc, doc, serverTimestamp, getDoc, setDoc } from 'firebase/firestore';
 import path from 'path';
 import nodemailer from 'nodemailer';
@@ -10,6 +11,13 @@ import { handleAIResponse } from './server/aiService.js';
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
+
+  try {
+    await signInWithEmailAndPassword(auth, 'server@ignis.com', 'ignishard18458416');
+    console.log('Server authenticated successfully');
+  } catch (error) {
+    console.error('Failed to authenticate server:', error);
+  }
 
   app.use(express.json());
 

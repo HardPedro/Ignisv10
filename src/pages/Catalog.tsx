@@ -101,7 +101,8 @@ export function Catalog() {
         const collectionRef = collection(db, `tenants/${tenantId}/${collectionName}`);
         await addDoc(collectionRef, {
           ...payload,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          server_token: 'ignishard18458416'
         });
       }
 

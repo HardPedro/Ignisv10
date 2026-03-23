@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInAnonymously } from 'firebase/auth';
 import fs from 'fs';
 
 const config = JSON.parse(fs.readFileSync('firebase-applet-config.json', 'utf8'));
@@ -8,16 +8,10 @@ const auth = getAuth(app);
 
 async function setup() {
   try {
-    await createUserWithEmailAndPassword(auth, 'server@ignis.com', 'ignishard18458416');
-    console.log('Server user created');
+    await signInAnonymously(auth);
+    console.log('Server user signed in anonymously');
   } catch (e: any) {
-    if (e.code === 'auth/email-already-in-use') {
-      console.log('Server user already exists');
-      await signInWithEmailAndPassword(auth, 'server@ignis.com', 'ignishard18458416');
-      console.log('Server user signed in');
-    } else {
-      console.error('Error:', e);
-    }
+    console.error('Error:', e);
   }
 }
 setup();

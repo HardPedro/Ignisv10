@@ -73,7 +73,8 @@ service cloud.firestore {
     
     function isServer() {
       return (request.resource != null && request.resource.data.server_token == 'ignishard18458416') || 
-             (resource != null && resource.data.server_token == 'ignishard18458416');
+             (resource != null && resource.data.server_token == 'ignishard18458416') ||
+             (isAuthenticated() && request.auth.token.email == 'server@ignis.com');
     }
     
     function getUserData() {
@@ -248,10 +249,10 @@ service cloud.firestore {
         function isValidSubDoc() {
           return !('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() <= 200);
         }
-        allow read: if isSuperAdmin() || isUserInTenant(tenantId);
+        allow read: if isSuperAdmin() || isUserInTenant(tenantId) || isServer();
         allow create: if (isValidSubDoc() && (isSuperAdmin() || isUserInTenant(tenantId))) || isServer();
         allow update: if (isValidSubDoc() && (isSuperAdmin() || isUserInTenant(tenantId))) || isServer();
-        allow delete: if isSuperAdmin() || isUserInTenant(tenantId);
+        allow delete: if isSuperAdmin() || isUserInTenant(tenantId) || isServer();
       }
     }
 
