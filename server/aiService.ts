@@ -59,8 +59,9 @@ export async function handleAIResponse(
 ) {
   if (convData.bot_active === false) return;
 
-  const aiSettings = tenantData.aiSettings;
-  if (!aiSettings || !aiSettings.enabled) return;
+  const aiSettingsRef = doc(db, `tenants/${tenantId}/settings`, 'ai_assistant');
+  const aiSettingsSnap = await getDoc(aiSettingsRef);
+  const aiSettings = aiSettingsSnap.exists() ? aiSettingsSnap.data() : { behavior: '', template: '' };
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -92,6 +93,8 @@ export async function handleAIResponse(
           isAiGenerated: true,
           server_token: 'ignishard18458416'
         });
+      } else {
+        console.error('Failed to send fallback message via Z-API:', await res.text());
       }
     } catch (fallbackError) {
       console.error('Error sending fallback message:', fallbackError);
@@ -243,6 +246,8 @@ Histórico da conversa:
           server_token: 'ignishard18458416'
         });
         console.log(`AI response sent and saved for conv ${convId}`);
+      } else {
+        console.error('Failed to send AI response via Z-API:', await res.text());
       }
     }
 
@@ -275,6 +280,8 @@ Histórico da conversa:
           isAiGenerated: true,
           server_token: 'ignishard18458416'
         });
+      } else {
+        console.error('Failed to send fallback message via Z-API:', await res.text());
       }
     } catch (fallbackError) {
       console.error('Error sending fallback message:', fallbackError);

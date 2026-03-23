@@ -199,18 +199,16 @@ async function startServer() {
           const tenantDoc = await getDoc(doc(db, 'tenants', tenantId));
           const tenantData = tenantDoc.data();
           
-          if (tenantData?.plan === 'Central Inteligente') {
-            await handleAIResponse(
-              tenantId,
-              tenantData,
-              convId,
-              convData,
-              phone,
-              instanceId,
-              waNumber.data(),
-              messagesRef
-            );
-          }
+          await handleAIResponse(
+            tenantId,
+            tenantData,
+            convId,
+            convData,
+            phone,
+            instanceId,
+            waNumber.data(),
+            messagesRef
+          );
         } catch (aiError) {
           console.error('Error generating AI response:', aiError);
         }
